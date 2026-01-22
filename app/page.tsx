@@ -75,7 +75,7 @@ export default function Home() {
             knowledge, character, and a deep sense of purpose.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <Link href="/register">
+            <Link href="#">
               <Button size="lg" className="w-full sm:w-auto bg-sky-700 hover:bg-sky-800 h-12 px-8 text-lg">
                 Start Admission
               </Button>
@@ -246,8 +246,8 @@ export default function Home() {
           <div className="space-y-4">
             <h4 className="text-lg font-bold text-white">Quick Links</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/login" className="hover:text-white">Admin Login</Link></li>
-              <li><Link href="/register" className="hover:text-white">Student Application</Link></li>
+              <li><Link href="#" className="hover:text-white">Admin Login</Link></li>
+              <li><Link href="#" className="hover:text-white">Student Application</Link></li>
               <li><Link href="#" className="hover:text-white">Privacy Policy</Link></li>
             </ul>
             <p className="text-xs text-slate-500 mt-8">
