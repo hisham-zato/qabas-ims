@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// generator client {
+// provider = "prisma-client"
+//  output   = "../app/generated/prisma"
+//}
+
+
+// schema.prisma
+
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  MANAGER
+  TEACHER
+  STUDENT
+}
+
+enum StudentStatus {
+  PENDING   // Signed up, waiting for Manager
+  ACTIVE    // Manager approved, ID assigned
+  SUSPENDED // Optional
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String    // Hashed
+  role          Role      @default(STUDENT)
+  createdAt     DateTime  @default(now())
+  
+  // Specific to Students
+  studentProfile StudentProfile?
+  
+  // Specific to Teachers
+  teacherClasses Class[]  @relation("TeacherClasses") // One teacher, many classes
+}
+
+model StudentProfile {
+  id             String        @id @default(cuid())
+  userId         String        @unique
+  user           User          @relation(fields: [userId], references: [id])
+  
+  instituteId    String?       @unique // The "INST-2026-001" (Null until approved)
+  status         StudentStatus @default(PENDING)
+  
+  dateOfBirth    DateTime?
+  parentPhone    String?
+  address        String?
+  
+  attendances    Attendance[]
+  enrollments    Enrollment[]
+}
+
+model Class {
+  id          String   @id @default(cuid())
+  name        String   // e.g., "Class 10-A" or "Robotics Level 1"
+  subject     String?
+  description String?
+  
+  teacherId   String
+  teacher     User     @relation("TeacherClasses", fields: [teacherId], references: [id])
+  
+  enrollments Enrollment[]
+  attendances Attendance[]
+}
+
+model Enrollment {
+  id        String   @id @default(cuid())
+  studentId String
+  classId   String
+  
+  student   StudentProfile @relation(fields: [studentId], references: [id])
+  class     Class          @relation(fields: [classId], references: [id])
+
+  @@unique([studentId, classId]) // Prevent duplicate enrollment
+}
+
+model Attendance {
+  id        String   @id @default(cuid())
+  date      DateTime @default(now())
+  status    String   // "PRESENT", "ABSENT", "LATE"
+  
+  studentId String
+  classId   String
+  
+  student   StudentProfile @relation(fields: [studentId], references: [id])
+  class     Class          @relation(fields: [classId], references: [id])
+}
