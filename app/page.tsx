@@ -1,12 +1,12 @@
-"use client"; // Required for animations
+"use client";
 
+import { useState, useEffect } from "react"; // Added hooks
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, Cpu, Heart, Lightbulb, Users, ArrowRight, Palette, Clock, MapPin, Phone, } from "lucide-react";
 import { motion } from "framer-motion";
-
 
 // Animation variants
 const fadeIn = {
@@ -15,47 +15,81 @@ const fadeIn = {
 };
 
 export default function Home() {
+  // --- STATE FOR SCROLL DETECTION ---
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // If user scrolls down more than 50px, toggle state
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <main className="min-h-screen flex flex-col bg-slate-50">
 
-      {/* --- NAVBAR --- */}
-      <nav className="w-full bg-white/90 backdrop-blur-md border-b sticky top-0 z-50 transition-all">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      {/* --- NAVBAR (UPDATED) --- */}
+      {/* Changed to 'fixed' so it sits ON TOP of the hero image */}
+      <nav 
+        className={`w-full fixed top-0 z-50 transition-all duration-300 ${
+          isScrolled 
+            ? "bg-white/90 backdrop-blur-md border-b py-2 shadow-sm" // Scrolled State (White)
+            : "bg-transparent border-transparent py-4" // Top State (Transparent)
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="relative h-12 w-32 md:w-40">
+            {/* Logo Wrapper */}
+            <div className={`relative h-12 w-32 md:w-40 transition-all duration-300 ${
+              isScrolled ? "" : "brightness-0 invert" // Turns logo white on dark background
+            }`}>
               <Image src="/logo.png" alt="Qabas Logo" fill className="object-contain object-left" priority />
             </div>
           </div>
-          <div className="hidden md:flex gap-8 text-sm font-medium text-slate-600">
-            <Link href="#about" className="hover:text-sky-700 transition">About</Link>
-            <Link href="#programs" className="hover:text-sky-700 transition">Programs</Link>
-            <Link href="#life" className="hover:text-sky-700 transition">Student Life</Link>
-            <Link href="/gallery" className="hover:text-sky-700 transition">Gallery</Link>
-            <Link href="#contact" className="hover:text-sky-700 transition">Contact</Link>
+
+          {/* Navigation Links - Text color changes based on scroll */}
+          <div className={`hidden md:flex gap-8 text-sm font-medium transition-colors duration-300 ${
+            isScrolled ? "text-slate-600" : "text-white/90"
+          }`}>
+            <Link href="#about" className={`transition hover:text-sky-500 ${isScrolled ? "hover:text-sky-700" : "hover:text-white"}`}>About</Link>
+            <Link href="#programs" className={`transition hover:text-sky-500 ${isScrolled ? "hover:text-sky-700" : "hover:text-white"}`}>Programs</Link>
+            <Link href="#life" className={`transition hover:text-sky-500 ${isScrolled ? "hover:text-sky-700" : "hover:text-white"}`}>Student Life</Link>
+            <Link href="/gallery" className={`transition hover:text-sky-500 ${isScrolled ? "hover:text-sky-700" : "hover:text-white"}`}>Gallery</Link>
+            <Link href="#contact" className={`transition hover:text-sky-500 ${isScrolled ? "hover:text-sky-700" : "hover:text-white"}`}>Contact</Link>
           </div>
+
           <div className="flex gap-4">
             <Link href="/gallery">
-              <Button variant="ghost" className="hidden sm:inline-flex">Gallery</Button>
+              <Button 
+                variant="ghost" 
+                className={`hidden sm:inline-flex transition-colors ${
+                  isScrolled ? "text-slate-600 hover:bg-slate-100" : "text-white hover:bg-white/20"
+                }`}
+              >
+                Gallery
+              </Button>
             </Link>
-            <Button className="bg-sky-700 hover:bg-sky-800 text-white shadow-md">Apply Now</Button>
+            <Button className="bg-sky-700 hover:bg-sky-800 text-white shadow-md border-none">Apply Now</Button>
           </div>
         </div>
       </nav>
 
       {/* --- IMMERSIVE HERO SECTION --- */}
-      {/* The image is now a background overlay */}
-      <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[100vh] flex items-center justify-center overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/hero-bg.jpg" // MAKE SURE YOU ADD THIS IMAGE TO PUBLIC FOLDER
+            src="/hero-bg.jpg"
             alt="Campus Life"
             fill
             className="object-cover"
             priority
           />
-          {/* Dark Overlay gradient */}
-          <div className="absolute inset-0 bg-slate-900/60 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
+          {/* Dark Overlay - Slightly stronger at the top for navbar readability */}
+          <div className="absolute inset-0 bg-slate-900/40 bg-gradient-to-b from-black/60 via-transparent to-slate-900/80" />
         </div>
 
         {/* Content */}
@@ -63,27 +97,27 @@ export default function Home() {
           initial="hidden"
           animate="visible"
           variants={fadeIn}
-          className="relative z-10 text-center px-6 max-w-4xl mx-auto space-y-6"
+          className="relative z-10 text-center px-6 max-w-4xl mx-auto space-y-6 pt-20" // Added pt-20 to account for fixed nav
         >
-          <div className="inline-block px-4 py-1.5 rounded-full bg-sky-500/20 backdrop-blur-sm border border-sky-400/30 text-sky-100 text-sm font-semibold tracking-wide mb-2">
+          <div className="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-semibold tracking-wide mb-2">
             Admissions Open for 2026-27
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-lg">
+          <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl">
             Nurturing Light for the <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-200 to-blue-400">
               Modern World
             </span>
           </h1>
-          <p className="text-xl text-slate-200 max-w-2xl mx-auto leading-relaxed drop-shadow-md">
+          <p className="text-xl text-slate-100 max-w-2xl mx-auto leading-relaxed drop-shadow-lg font-medium">
             QABAS Islamic Life School blends <strong>moral excellence</strong> with
             <strong> strong academics</strong> and <strong>modern technologies</strong>. We nurture professionals equipped with
             knowledge, character, and a deep sense of purpose.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-            <Button size="lg" className="bg-sky-600 hover:bg-sky-700 text-white border-none h-14 px-8 text-lg rounded-full">
+            <Button size="lg" className="bg-sky-600 hover:bg-sky-700 text-white border-none h-14 px-8 text-lg rounded-full shadow-lg hover:shadow-sky-500/25 transition-all">
               Start Admission
             </Button>
-            <Button variant="outline" size="lg" className="h-14 px-8 text-lg rounded-full bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-sm">
+            <Button variant="outline" size="lg" className="h-14 px-8 text-lg rounded-full bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur-md transition-all">
               Explore Campus
             </Button>
           </div>
@@ -91,7 +125,6 @@ export default function Home() {
       </section>
 
       {/* --- FEATURE: ZALVION TEASER --- */}
-      {/* A modern, darker strip to create contrast/excitement */}
       <section className="bg-slate-900 py-12 px-6 border-y border-slate-800">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-white space-y-2">
@@ -109,7 +142,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- ABOUT SECTION (Redesigned without Placeholder) --- */}
+      {/* --- ABOUT SECTION --- */}
       <section id="about" className="py-24 px-6 bg-white">
         <motion.div
           initial="hidden"
