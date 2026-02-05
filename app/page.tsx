@@ -180,7 +180,7 @@ export default function Home() {
               <Palette className="w-4 h-4" /> ZALVION ART FEST
             </div>
             <h3 className="text-2xl md:text-3xl font-bold">Unleashing Creativity at Qabas</h3>
-            <p className="text-slate-400 max-w-lg">Discover the artistic talents of our students in our annual art festival.</p>
+            <p className="text-slate-400 max-w-lg">Discover the artistic talents of our students in our annual life festival.</p>
           </div>
           <Link href="/gallery">
             <Button className="bg-purple-600 hover:bg-purple-700 text-white rounded-full px-8">
