@@ -47,7 +47,7 @@ export default function GalleryPage() {
               ZALVION
             </h1>
             <p className="text-slate-400 text-lg max-w-2xl">
-              Qabas Art Festival. A celebration of creativity, color, and student talent.
+              Qabas Life Festival. A celebration of creativity, color, and student talent.
             </p>
           </div>
 
