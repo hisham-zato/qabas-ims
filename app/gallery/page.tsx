@@ -7,12 +7,17 @@ import { ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 
 // --- DUMMY DATA (Replace paths with your actual files) ---
-const generalPhotos = [
+const campusPhotos = [
   "/gallery/1.jpg", "/gallery/2.jpg", "/gallery/3.jpg", 
-  "/gallery/4.jpg", "/gallery/5.jpg", "/gallery/6.jpg", 
+  "/gallery/4.jpg", 
+];
+
+const studentlifePhotos = [
+  "/gallery/5.jpg", "/gallery/6.jpg", 
   "/gallery/7.jpg", "/gallery/8.jpg", "/gallery/9.jpg", 
   "/gallery/10.jpg", "/gallery/11.jpg"
 ];
+
 
 const zalvionPhotos = [
   "/gallery/zalvion/1.jpg", "/gallery/zalvion/2.jpg", 
@@ -77,10 +82,36 @@ export default function GalleryPage() {
       {/* --- CAMPUS LIFE SECTION (Light Mode) --- */}
       <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8">Campus Life</h2>
+          <h2 className="text-3xl font-bold text-slate-900 mb-8">Campus</h2>
           
           <div className="columns-1 md:columns-3 gap-4 space-y-4">
-            {generalPhotos.map((src, i) => (
+            {campusPhotos.map((src, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="break-inside-avoid rounded-xl overflow-hidden shadow-md"
+              >
+                <Image 
+                  src={src} 
+                  alt={`Campus ${i}`} 
+                  width={500} 
+                  height={500}
+                  className="w-full h-auto object-cover hover:opacity-90 transition-opacity"
+                />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl font-bold text-slate-900 mb-8">Student Life</h2>
+          
+          <div className="columns-1 md:columns-3 gap-4 space-y-4">
+            {studentlifePhotos.map((src, i) => (
               <motion.div 
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
